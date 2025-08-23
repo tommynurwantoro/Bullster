@@ -1,0 +1,5 @@
+.bmad-core
+.cursor
+dist/
+node_modules/
+.env
