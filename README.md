@@ -1,4 +1,4 @@
-# 🎯 Meni - Discord Member Engagement Bot
+# 🎯 Bullster - Discord Member Engagement Bot
 
 A powerful Discord bot built with TypeScript and Discord.js v14 to help with member engagement, community management, and server moderation.
 
@@ -29,7 +29,7 @@ A powerful Discord bot built with TypeScript and Discord.js v14 to help with mem
 
 1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Click "New Application"
-3. Give it a name (e.g., "Meni Bot")
+3. Give it a name (e.g., "Bullster Bot")
 4. Go to "Bot" section and click "Add Bot"
 5. Copy the **Bot Token** and **Client ID**
 

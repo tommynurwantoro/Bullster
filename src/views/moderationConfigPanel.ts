@@ -33,7 +33,7 @@ export function createModerationConfigPanel(guildId: string) {
                 inline: false
             }
         )
-        .setFooter({ text: 'Powered by MENI' });
+        .setFooter({ text: 'Powered by BULLSTER' });
 
     const moderationRow = new ActionRowBuilder()
         .addComponents(

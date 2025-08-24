@@ -40,7 +40,7 @@ export async function createMainConfigPanel(interaction: ButtonInteraction | Cha
                 inline: false
             }
         )
-        .setFooter({ text: 'Powered by MENI' })
+        .setFooter({ text: 'Powered by BULLSTER' })
         .setTimestamp();
 
     const row1 = new ActionRowBuilder()

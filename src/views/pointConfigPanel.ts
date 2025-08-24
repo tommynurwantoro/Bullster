@@ -11,7 +11,7 @@ export function createPointsChannelSelectionPanel(guildId: string) {
             { name: '📊 Step 1: Points Logs Channel', value: 'Select the channel where point transactions will be logged', inline: false }
             // { name: '🛒 Step 2: Marketplace Channel', value: 'Select the channel where users can exchange points', inline: false }
         )
-        .setFooter({ text: 'Powered by MENI' });
+        .setFooter({ text: 'Powered by BULLSTER' });
 
     const logsRow = new ActionRowBuilder()
         .addComponents(

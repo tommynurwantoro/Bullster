@@ -18,7 +18,7 @@ export function createLinkProtectionPanel(guildId: string) {
                     inline: false
                 }
             )
-            .setFooter({ text: 'Powered by MENI' });
+            .setFooter({ text: 'Powered by BULLSTER' });
 
         const row = new ActionRowBuilder()
             .addComponents(
@@ -63,7 +63,7 @@ export function createLinkProtectionPanel(guildId: string) {
                 inline: false
             }
         )
-        .setFooter({ text: 'Powered by MENI' });
+        .setFooter({ text: 'Powered by BULLSTER' });
 
     const toggleRow = new ActionRowBuilder()
         .addComponents(
