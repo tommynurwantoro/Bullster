@@ -1,5 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ModalSubmitInteraction, ChannelSelectMenuInteraction } from 'discord.js';
-import { ConfigManager } from '../utils/config';
+import { ConfigManager } from '../../utils/config';
 
 export function createLinkProtectionPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);

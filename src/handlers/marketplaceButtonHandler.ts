@@ -1,7 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
-import { showMarketplaceConfigPanel } from '../views/marketplaceConfigPanel';
-import { showMarketplaceStockPanel } from '../views/marketplaceStockPanel';
-import { createStockAddModal, createStockRemoveModal, createStockUpdateModal } from '../views/marketplaceStockModal';
+import { showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
+import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
+import { createStockAddModal, createStockRemoveModal, createStockUpdateModal } from '../views/marketplace/marketplaceStockModal';
 import { ConfigManager } from '../utils/config';
 
 export async function handleMarketplaceButton(interaction: ButtonInteraction) {
@@ -81,17 +81,17 @@ async function handleMarketplaceBack(interaction: ButtonInteraction) {
 }
 
 async function handleStockAdd(interaction: ButtonInteraction) {
-    const modal = createStockAddModal();
+    const modal = createStockAddModal(interaction.message.id);
     await interaction.showModal(modal);
 }
 
 async function handleStockUpdate(interaction: ButtonInteraction) {
-    const modal = createStockUpdateModal();
+    const modal = createStockUpdateModal(interaction.message.id);
     await interaction.showModal(modal);
 }
 
 async function handleStockRemove(interaction: ButtonInteraction) {
-    const modal = createStockRemoveModal();
+    const modal = createStockRemoveModal(interaction.message.id);
     await interaction.showModal(modal);
 }
 

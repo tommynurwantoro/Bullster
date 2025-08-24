@@ -1,8 +1,8 @@
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 
-export function createStockAddModal() {
+export function createStockAddModal(messageId: string) {
     const modal = new ModalBuilder()
-        .setCustomId('stock_add_modal')
+        .setCustomId(`stock_add_modal:${messageId}`)
         .setTitle('📦 Add New Stock Item');
 
     const nameInput = new TextInputBuilder()
@@ -47,9 +47,9 @@ export function createStockAddModal() {
     return modal;
 }
 
-export function createStockUpdateModal() {
+export function createStockUpdateModal(messageId: string) {
     const modal = new ModalBuilder()
-        .setCustomId('stock_update_modal')
+        .setCustomId(`stock_update_modal:${messageId}`)
         .setTitle('🔄 Update Stock Item');
 
     const nameInput = new TextInputBuilder()
@@ -94,9 +94,9 @@ export function createStockUpdateModal() {
     return modal;
 }
 
-export function createStockRemoveModal() {
+export function createStockRemoveModal(messageId: string) {
     const modal = new ModalBuilder()
-        .setCustomId('stock_remove_modal')
+        .setCustomId(`stock_remove_modal:${messageId}`)
         .setTitle('🗑️ Remove Stock Item');
 
     const nameInput = new TextInputBuilder()

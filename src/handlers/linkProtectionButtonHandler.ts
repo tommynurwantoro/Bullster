@@ -1,7 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
-import { showLinkProtectionPanel } from '../views/linkProtectionPanel';
+import { createLinkProtectionPanel, showLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
 import { ConfigManager } from '../utils/config';
-import { createLinkProtectionModal } from '../views/linkProtectionModal';
+import { createLinkProtectionModal } from '../views/moderation/linkProtectionModal';
 
 export async function handleLinkProtectionButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -32,11 +32,21 @@ async function handleLinkProtectionEnable(interaction: ButtonInteraction) {
         }
     });
 
-    const additionalMessage = `
-    > ===========================
-    > ✅ Link protection enabled.
-    > ===========================`;
-    await showLinkProtectionPanel(interaction, additionalMessage);
+    const channel = interaction.channel;
+    if (channel && channel.isTextBased()) {
+        const message = await channel.messages.fetch(interaction.message.id);
+        if (message) {
+            const panel = createLinkProtectionPanel(interaction.guildId!);
+            await message.edit({
+                embeds: [panel.embed],
+                components: [panel.components[0] as any, panel.components[1] as any]
+            });
+            await interaction.reply({
+                content: '✅ Link protection enabled!',
+                ephemeral: true
+            });
+        }
+    }
 }
 
 async function handleLinkProtectionDisable(interaction: ButtonInteraction) {

@@ -1,5 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, ButtonInteraction, ChannelSelectMenuInteraction, ModalSubmitInteraction } from 'discord.js';
-import { ConfigManager } from '../utils/config';
+import { ConfigManager } from '../../utils/config';
 
 export function createMarketplaceConfigPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);
@@ -31,11 +31,6 @@ export function createMarketplaceConfigPanel(guildId: string) {
                     ? `✅ ${stockCount} items available`
                     : '❌ No stock items configured',
                 inline: false
-            },
-            {
-                name: '🛒 Features',
-                value: '• Item listings\n• Price management\n• Stock tracking\n• User transactions',
-                inline: false
             }
         )
         .setFooter({ text: 'Powered by BULLSTER' });
@@ -63,9 +58,13 @@ export function createMarketplaceConfigPanel(guildId: string) {
                 .setLabel('Manage Stock')
                 .setStyle(ButtonStyle.Primary)
                 .setEmoji('📦')
-                .setDisabled(!hasMarketplaceChannel),
+                .setDisabled(!hasMarketplaceChannel)
+        );
+    
+    const otherRows = new ActionRowBuilder()
+        .addComponents(
             new ButtonBuilder()
-                .setCustomId('marketplace_back')
+                .setCustomId('main_back')
                 .setLabel('Back to Configuration Panel')
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('⬅️')
@@ -73,7 +72,7 @@ export function createMarketplaceConfigPanel(guildId: string) {
 
     return {
         embed,
-        components: [channelRow, controlRow]
+        components: [channelRow, controlRow, otherRows]
     };
 }
 
@@ -87,7 +86,7 @@ export async function showMarketplaceConfigPanel(interaction: ButtonInteraction 
         await interaction.reply({
             content: additionalMessage || '',
             embeds: [panel.embed],
-            components: [panel.components[0] as any, panel.components[1] as any],
+            components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any],
             ephemeral: true
         });
     } else {
@@ -95,7 +94,7 @@ export async function showMarketplaceConfigPanel(interaction: ButtonInteraction 
         await interaction.update({
             content: additionalMessage || '',
             embeds: [panel.embed],
-            components: [panel.components[0] as any, panel.components[1] as any]
+            components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any]
         });
     }
 }

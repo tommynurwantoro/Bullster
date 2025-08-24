@@ -6,7 +6,7 @@ import { handleModerationButton } from './moderationButtonHandler';
 import { handleMarketplaceButton } from './marketplaceButtonHandler';
 import { handleLinkProtectionButton } from './linkProtectionButtonHandler';
 import { showMainConfigPanel, createResetSuccessPanel, createResetErrorPanel, showWelcomeConfigPanel, showMarketplaceConfigPanel } from '../views';
-import { showModerationConfigPanel } from '../views/moderationConfigPanel';
+import { showModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
 
 export async function handleButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -48,8 +48,8 @@ async function handleBackButton(interaction: ButtonInteraction) {
     }
 
     if (customId === 'welcome_back' || customId === 'points_back' ||
-        customId === 'moderation_back' || customId === 'marketplace_back' ||
-        customId === 'reset_cancel' || customId === 'reset_back_to_panel') {
+        customId === 'moderation_back' || customId === 'reset_cancel' ||
+        customId === 'reset_back_to_panel' || customId === 'main_back') {
 
         // Return to main configuration panel
         await showMainConfigPanel(interaction);

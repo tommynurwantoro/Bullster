@@ -1,14 +1,11 @@
 import { ButtonInteraction } from 'discord.js';
 import {
     showWelcomeConfigPanel,
-    createLoggingConfigPanel,
-    createCustomizationConfigPanel,
-    createAdvancedConfigPanel,
     createResetConfirmPanel
 } from '../views';
-import { createPointsChannelSelectionPanel, showPointsConfigPanel } from '../views/pointConfigPanel';
-import { showModerationConfigPanel } from '../views/moderationConfigPanel';
-import { showMarketplaceConfigPanel } from '../views/marketplaceConfigPanel';
+import { showPointsConfigPanel } from '../views/points/pointConfigPanel';
+import { showModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
+import { showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
 
 export async function handleConfigButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -25,15 +22,6 @@ export async function handleConfigButton(interaction: ButtonInteraction) {
             break;
         case 'config_marketplace':
             await handleMarketplaceConfig(interaction);
-            break;
-        case 'config_logging':
-            await handleLoggingConfig(interaction);
-            break;
-        case 'config_customization':
-            await handleCustomizationConfig(interaction);
-            break;
-        case 'config_advanced':
-            await handleAdvancedConfig(interaction);
             break;
         case 'config_reset':
             await handleResetConfig(interaction);
@@ -62,30 +50,6 @@ async function handleModerationConfig(interaction: ButtonInteraction) {
 async function handleMarketplaceConfig(interaction: ButtonInteraction) {
     if (!interaction.guildId) return;
     await showMarketplaceConfigPanel(interaction);
-}
-
-async function handleLoggingConfig(interaction: ButtonInteraction) {
-    const panel = createLoggingConfigPanel();
-    await interaction.update({
-        embeds: [panel.embed],
-        components: [panel.components[0] as any]
-    });
-}
-
-async function handleCustomizationConfig(interaction: ButtonInteraction) {
-    const panel = createCustomizationConfigPanel();
-    await interaction.update({
-        embeds: [panel.embed],
-        components: [panel.components[0] as any]
-    });
-}
-
-async function handleAdvancedConfig(interaction: ButtonInteraction) {
-    const panel = createAdvancedConfigPanel();
-    await interaction.update({
-        embeds: [panel.embed],
-        components: [panel.components[0] as any]
-    });
 }
 
 async function handleResetConfig(interaction: ButtonInteraction) {

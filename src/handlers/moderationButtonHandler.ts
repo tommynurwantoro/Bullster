@@ -1,9 +1,8 @@
 import { ButtonInteraction } from 'discord.js';
-import { showModerationConfigPanel } from '../views/moderationConfigPanel';
-import { showModerationChannelPanel } from '../views/moderationChannelPanel';
-import { createLinkProtectionModal } from '../views/linkProtectionModal';
+import { createModerationConfigPanel, showModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
+import { showModerationChannelPanel } from '../views/moderation/moderationChannelPanel';
 import { ConfigManager } from '../utils/config';
-import { showLinkProtectionPanel } from '../views/linkProtectionPanel';
+import { showLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
 
 export async function handleModerationButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -49,12 +48,21 @@ async function handleModerationDisable(interaction: ButtonInteraction) {
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Moderation disabled.
-        > ===========================`;
-        await showModerationConfigPanel(interaction, additionalMessage);
-
+        const channel = interaction.channel;
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(interaction.message.id);
+            if (message) {
+                const panel = createModerationConfigPanel(interaction.guildId);
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
+                await interaction.reply({
+                    content: '✅ Moderation disabled!',
+                    ephemeral: true
+                });
+            }
+        }
     } catch (error) {
         console.error('Error disabling moderation:', error);
         await interaction.reply({

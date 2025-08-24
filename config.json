@@ -2,22 +2,10 @@
   "982659357953118208": {
     "welcome": {
       "channel": "1002996941417873519",
-      "message": "Welcome to Test Server!"
+      "message": "Welcome to the server!"
     },
     "points": {
-      "logsChannel": "1390174157173424168",
-      "enabled": false,
-      "marketplaceChannel": "1390504209035825252",
-      "stock": [
-        {
-          "name": "Test",
-          "description": "Test",
-          "price": 100,
-          "quantity": 12,
-          "addedBy": "757119647102271588",
-          "addedAt": "2025-08-22T14:49:45.934Z"
-        }
-      ]
+      "logsChannel": "1390174157173424168"
     },
     "moderation": {
       "linkProtection": true,
@@ -26,6 +14,6 @@
       ],
       "logsChannel": "1408006297634471987"
     },
-    "setupAt": "2025-08-22T14:49:45.934Z"
+    "setupAt": "2025-08-24T16:41:36.077Z"
   }
 }

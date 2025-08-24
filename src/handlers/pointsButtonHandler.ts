@@ -1,10 +1,24 @@
 import { ButtonInteraction } from 'discord.js';
-import { createPointsChannelSelectionPanel, showMainConfigPanel } from '../views';
+import { createPointsChannelSelectionPanel } from '../views';
 import { ConfigManager } from '../utils/config';
-import { showPointsConfigPanel } from '../views/pointConfigPanel';
+import { showPointsConfigPanel } from '../views/points/pointConfigPanel';
 
 export async function handlePointsButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
+
+    if (customId.includes(':')) {
+        const [buttonType, messageId] = customId.split(':');
+        switch (buttonType) {
+            case 'points_feature_disable':
+                await handlePointsFeatureDisable(interaction, messageId);
+                break;
+            default:
+                await interaction.reply({
+                    content: '❌ Unknown points option',
+                    ephemeral: true
+                });
+        }
+    }
 
     switch (customId) {
         case 'points_configure':
@@ -12,9 +26,6 @@ export async function handlePointsButton(interaction: ButtonInteraction) {
             break;
         case 'points_back':
             await handlePointsBack(interaction);
-            break;
-        case 'points_feature_disable':
-            await handlePointsFeatureDisable(interaction);
             break;
         default:
             await interaction.reply({
@@ -26,7 +37,7 @@ export async function handlePointsButton(interaction: ButtonInteraction) {
 
 async function handlePointsConfigure(interaction: ButtonInteraction) {
     if (!interaction.guildId) return;
-    const panel = createPointsChannelSelectionPanel(interaction.guildId);
+    const panel = createPointsChannelSelectionPanel(interaction.guildId, interaction.message.id);
     await interaction.update({
         embeds: [panel.embed],
         components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any]
@@ -42,7 +53,7 @@ async function handlePointsBack(interaction: ButtonInteraction) {
     });
 }
 
-async function handlePointsFeatureDisable(interaction: ButtonInteraction) {
+async function handlePointsFeatureDisable(interaction: ButtonInteraction, messageId: string) {
     if (!interaction.guildId) return;
     const config = ConfigManager.getGuildConfig(interaction.guildId);
     if (!config?.points?.logsChannel) return;
@@ -53,10 +64,24 @@ async function handlePointsFeatureDisable(interaction: ButtonInteraction) {
         }
     });
 
-    const additionalMessage = `
-    > ===========================
-    > ✅ Successfully disabled points feature!
-    > ===========================`;
-
-    await showPointsConfigPanel(interaction, additionalMessage);
+    const channel = interaction.channel;
+    if (channel && channel.isTextBased()) {
+        const message = await channel.messages.fetch(messageId);
+        if (message) {
+            const panel = createPointsChannelSelectionPanel(interaction.guildId, messageId);
+            await message.edit({
+                embeds: [panel.embed],
+                components: [panel.components[0] as any, panel.components[1] as any]
+            });
+            await interaction.reply({
+                content: '✅ Points feature disabled!',
+                ephemeral: true
+            });
+        }
+    } else {
+        await interaction.reply({
+            content: '❌ Failed to disable points feature. Please try again.',
+            ephemeral: true
+        });
+    }
 }

@@ -1,19 +1,33 @@
 import { ChannelSelectMenuInteraction } from 'discord.js';
 import { ConfigManager } from '../utils/config';
-import { createModerationConfigPanel, showModerationConfigPanel } from '../views/moderationConfigPanel';
-import { showMarketplaceConfigPanel } from '../views/marketplaceConfigPanel';
-import { showWelcomeConfigPanel } from '../views/welcomeConfigPanel';
-import { showPointsConfigPanel } from '../views/pointConfigPanel';
+import { createModerationConfigPanel, showModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
+import { showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
+import { createWelcomeConfigPanel, showWelcomeConfigPanel } from '../views/welcome/welcomeConfigPanel';
+import { createPointsChannelSelectionPanel, showPointsConfigPanel } from '../views/points/pointConfigPanel';
+import { createWelcomeChannelPanel } from '../views/welcome/welcomeChannelPanel';
 
 export async function handleChannelSelect(interaction: ChannelSelectMenuInteraction) {
     const customId = interaction.customId;
 
+    if (customId.includes(':')) {
+        const [channelType, messageId] = customId.split(':');
+
+        switch (channelType) {
+            case 'points_logs_channel':
+                await handlePointsLogsChannel(interaction, messageId);
+                break;
+            default:
+                await interaction.reply({
+                    content: '❌ Unknown channel selection',
+                    ephemeral: true
+                });
+        }
+        return;
+    }
+
     switch (customId) {
         case 'welcome_channel_select':
             await handleWelcomeChannel(interaction);
-            break;
-        case 'points_logs_channel':
-            await handlePointsLogsChannel(interaction);
             break;
         case 'points_marketplace_channel':
             await handlePointsMarketplaceChannel(interaction);
@@ -53,13 +67,25 @@ async function handleWelcomeChannel(interaction: ChannelSelectMenuInteraction) {
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Welcome channel set to <#${selectedChannel?.id}>!
-        > You can now configure the welcome message.
-        > ===========================`;
-        await showWelcomeConfigPanel(interaction, additionalMessage);
+        const channel = interaction.channel;
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(interaction.message.id);
+            if (message) {
+                const panel = createWelcomeConfigPanel(interaction.guildId!);
+                
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
 
+                await interaction.reply({
+                    content: `✅ Welcome channel set to <#${selectedChannel?.id}>!`,
+                    ephemeral: true
+                });
+
+                return;
+            }
+        }
     } catch (error) {
         console.error('Error setting welcome channel:', error);
         await interaction.reply({
@@ -69,7 +95,7 @@ async function handleWelcomeChannel(interaction: ChannelSelectMenuInteraction) {
     }
 }
 
-async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction) {
+async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction, messageId: string) {
     const guildId = interaction.guildId;
     if (!guildId) return;
 
@@ -93,14 +119,23 @@ async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Points logs channel set to <#${selectedChannel.id}>!
-        > You can now configure the marketplace channel.
-        > ===========================`;
+        const channel = interaction.channel;
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(messageId);
+            if (message) {
+                const panel = createPointsChannelSelectionPanel(interaction.guildId!, messageId);
 
-        await showPointsConfigPanel(interaction, additionalMessage);
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
 
+                await interaction.reply({
+                    content: `✅ Points logs channel set to <#${selectedChannel.id}>!`,
+                    ephemeral: true
+                });
+            }
+        }
     } catch (error) {
         console.error('Error setting points logs channel:', error);
         await interaction.reply({
@@ -217,13 +252,21 @@ async function handleModerationLogsChannel(interaction: ChannelSelectMenuInterac
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Moderation logs channel set to <#${selectedChannel.id}>!
-        > You can now configure link protection.
-        > ===========================`;
-
-        await showModerationConfigPanel(interaction, additionalMessage);
+        const channel = interaction.channel;
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(interaction.message.id);
+            if (message) {
+                const panel = createModerationConfigPanel(interaction.guildId!);
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
+                await interaction.reply({
+                    content: `✅ Moderation logs channel set to <#${selectedChannel.id}>!`,
+                    ephemeral: true
+                });
+            }
+        }
     } catch (error) {
         console.error('Error setting moderation logs channel:', error);
         await interaction.reply({

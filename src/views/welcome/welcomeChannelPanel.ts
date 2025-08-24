@@ -1,4 +1,4 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, ButtonInteraction, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, ButtonInteraction } from 'discord.js';
 
 export function createWelcomeChannelPanel() {
     const embed = new EmbedBuilder()
@@ -17,7 +17,7 @@ export function createWelcomeChannelPanel() {
     const channelRow = new ActionRowBuilder()
         .addComponents(
             new ChannelSelectMenuBuilder()
-                .setCustomId('welcome_channel_select')
+                .setCustomId(`welcome_channel_select`)
                 .setPlaceholder('Select channel for welcome messages')
                 .setChannelTypes(ChannelType.GuildText)
                 .setMinValues(1)

@@ -1,9 +1,14 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ModalSubmitInteraction } from 'discord.js';
-import { ConfigManager } from '../utils/config';
+import { ConfigManager } from '../../utils/config';
 
 export function createMarketplaceStockPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);
     const stockItems = config?.points?.stock || [];
+
+    // list items in a list
+    const itemList = stockItems.map((item) => `
+    📦 ${item.name} (${item.description})
+    💰 ${item.price} points | ${item.quantity} available`).join('\n');
 
     const embed = new EmbedBuilder()
         .setColor('#00ff00')
@@ -13,37 +18,12 @@ export function createMarketplaceStockPanel(guildId: string) {
             {
                 name: '📊 Current Stock',
                 value: stockItems.length > 0
-                    ? `${stockItems.length} items available`
+                    ? itemList
                     : 'No items in stock',
-                inline: false
-            },
-            {
-                name: '🛒 Available Actions',
-                value: '• Add new items\n• Update existing items\n• Remove items\n• View all stock',
                 inline: false
             }
         )
         .setFooter({ text: 'Powered by BULLSTER' });
-
-    if (stockItems.length > 0) {
-        // Show first few items as examples
-        const sampleItems = stockItems.slice(0, 3);
-        sampleItems.forEach((item, index) => {
-            embed.addFields({
-                name: `📦 ${item.name}`,
-                value: `Price: ${item.price} points | Quantity: ${item.quantity}`,
-                inline: false
-            });
-        });
-
-        if (stockItems.length > 3) {
-            embed.addFields({
-                name: '📋 More Items',
-                value: `...and ${stockItems.length - 3} more items`,
-                inline: false
-            });
-        }
-    }
 
     const actionRow = new ActionRowBuilder()
         .addComponents(

@@ -1,5 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ChannelSelectMenuInteraction } from 'discord.js';
-import { ConfigManager } from '../utils/config';
+import { ConfigManager } from '../../utils/config';
 
 export function createModerationConfigPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);
@@ -58,7 +58,7 @@ export function createModerationConfigPanel(guildId: string) {
     const backRow = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-                .setCustomId('moderation_back')
+                .setCustomId('main_back')
                 .setLabel('Back to Configuration Panel')
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('⬅️')

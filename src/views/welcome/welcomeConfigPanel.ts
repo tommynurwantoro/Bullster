@@ -1,5 +1,5 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ModalSubmitInteraction, ChannelSelectMenuInteraction } from 'discord.js';
-import { ConfigManager } from '../utils/config';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ChannelSelectMenuInteraction } from 'discord.js';
+import { ConfigManager } from '../../utils/config';
 
 export function createWelcomeConfigPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);
@@ -12,11 +12,11 @@ export function createWelcomeConfigPanel(guildId: string) {
     const row = new ActionRowBuilder()
         .addComponents(
             !config?.welcome?.channel ? new ButtonBuilder()
-                .setCustomId('welcome_enable')
+                .setCustomId(`welcome_enable`)
                 .setLabel('Enable Welcome System')
                 .setStyle(ButtonStyle.Success)
                 .setEmoji('✅') : new ButtonBuilder()
-                    .setCustomId('welcome_disable')
+                    .setCustomId(`welcome_disable`)
                     .setLabel('Disable Welcome System')
                     .setStyle(ButtonStyle.Danger)
                     .setEmoji('❌'),
@@ -37,7 +37,7 @@ export function createWelcomeConfigPanel(guildId: string) {
     const row2 = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-                .setCustomId('welcome_back')
+                .setCustomId('main_back')
                 .setLabel('Back to Configuration Panel')
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('⬅️')

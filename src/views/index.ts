@@ -2,19 +2,19 @@
 export { createMainConfigPanel, showMainConfigPanel } from './mainConfigPanel';
 
 // Welcome configuration panel
-export { showWelcomeConfigPanel } from './welcomeConfigPanel';
+export { showWelcomeConfigPanel } from './welcome/welcomeConfigPanel';
 
 // Points configuration panel
-export { createPointsChannelSelectionPanel } from './pointConfigPanel';
+export { createPointsChannelSelectionPanel } from './points/pointConfigPanel';
 
 // Moderation configuration panel
-export { createModerationConfigPanel } from './moderationConfigPanel';
-export { createModerationChannelPanel } from './moderationChannelPanel';
-export { createLinkProtectionPanel } from './linkProtectionPanel';
-export { createLinkProtectionModal } from './linkProtectionModal';
-export { createMarketplaceConfigPanel, showMarketplaceConfigPanel } from './marketplaceConfigPanel';
-export { createMarketplaceStockPanel, showMarketplaceStockPanel } from './marketplaceStockPanel';
-export { createStockAddModal, createStockUpdateModal } from './marketplaceStockModal';
+export { createModerationConfigPanel } from './moderation/moderationConfigPanel';
+export { createModerationChannelPanel } from './moderation/moderationChannelPanel';
+export { createLinkProtectionPanel } from './moderation/linkProtectionPanel';
+export { createLinkProtectionModal } from './moderation/linkProtectionModal';
+export { createMarketplaceConfigPanel, showMarketplaceConfigPanel } from './marketplace/marketplaceConfigPanel';
+export { createMarketplaceStockPanel, showMarketplaceStockPanel } from './marketplace/marketplaceStockPanel';
+export { createStockAddModal, createStockUpdateModal, createStockRemoveModal } from './marketplace/marketplaceStockModal';
 
 // Reset panels
 export {
@@ -22,10 +22,3 @@ export {
     createResetSuccessPanel,
     createResetErrorPanel
 } from './resetConfirmPanel';
-
-// Configuration section panels
-export {
-    createLoggingConfigPanel,
-    createCustomizationConfigPanel,
-    createAdvancedConfigPanel
-} from './configSectionPanels';

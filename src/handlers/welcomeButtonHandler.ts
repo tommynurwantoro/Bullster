@@ -1,12 +1,12 @@
 import { ButtonInteraction } from 'discord.js';
-import { showWelcomeChannelPanel } from '../views/welcomeChannelPanel';
+import { showWelcomeChannelPanel } from '../views/welcome/welcomeChannelPanel';
 import { ConfigManager } from '../utils/config';
-import { showWelcomeConfigPanel } from '../views/welcomeConfigPanel';
-import { showWelcomeMessageUpdateModal } from '../views/welcomeMessageUpdateModal';
+import { createWelcomeConfigPanel } from '../views/welcome/welcomeConfigPanel';
+import { showWelcomeMessageUpdateModal } from '../views/welcome/welcomeMessageUpdateModal';
 
 export async function handleWelcomeButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
-
+    
     switch (customId) {
         case 'welcome_enable':
             await handleWelcomeEnable(interaction);
@@ -48,12 +48,23 @@ async function handleWelcomeDisable(interaction: ButtonInteraction) {
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Welcome system disabled.
-        > ===========================`;
-        await showWelcomeConfigPanel(interaction, additionalMessage);
+        const channel = interaction.channel;
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(interaction.message.id);
+            if (message) {
+                const panel = createWelcomeConfigPanel(interaction.guildId);
 
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
+
+                await interaction.reply({
+                    content: '✅ Welcome system disabled.',
+                    ephemeral: true
+                });
+            }
+        }
     } catch (error) {
         console.error('Error disabling welcome system:', error);
         await interaction.reply({

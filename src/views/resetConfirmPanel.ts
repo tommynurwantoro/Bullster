@@ -46,7 +46,7 @@ export function createResetSuccessPanel(userId: string) {
     const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-                .setCustomId('reset_back_to_panel')
+                .setCustomId('main_back')
                 .setLabel('Back to Configuration Panel')
                 .setStyle(ButtonStyle.Primary)
                 .setEmoji('⚙️')
@@ -68,7 +68,7 @@ export function createResetErrorPanel() {
     const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-                .setCustomId('reset_back_to_panel')
+                .setCustomId('main_back')
                 .setLabel('Back to Configuration Panel')
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('⬅️')

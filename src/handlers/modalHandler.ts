@@ -1,24 +1,39 @@
 import { ModalSubmitInteraction } from 'discord.js';
-import { showMarketplaceStockPanel } from '../views/marketplaceStockPanel';
+import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
 
 export async function handleModal(interaction: ModalSubmitInteraction) {
     const customId = interaction.customId;
 
+    // Check if customId contains a message ID (format: modalType:messageId)
+    if (customId.includes(':')) {
+        const [modalType, messageId] = customId.split(':');
+        
+        switch (modalType) {
+            case 'stock_add_modal':
+                await handleAddStockModal(interaction, messageId);
+                break;
+            case 'stock_update_modal':
+                await handleUpdateStockModal(interaction, messageId);
+                break;
+            case 'stock_remove_modal':
+                await handleRemoveStockModal(interaction, messageId);
+                break;
+            default:
+                await interaction.reply({
+                    content: '❌ Unknown modal submission',
+                    ephemeral: true
+                });
+        }
+        return;
+    }
+
+    // Handle legacy modal types without message IDs
     switch (customId) {
         case 'welcome_message_modal':
             await handleWelcomeMessageModal(interaction);
             break;
         case 'link_protection_whitelist_modal':
             await handleLinkProtectionWhitelistModal(interaction);
-            break;
-        case 'stock_add_modal':
-            await handleAddStockModal(interaction);
-            break;
-        case 'stock_update_modal':
-            await handleUpdateStockModal(interaction);
-            break;
-        case 'stock_remove_modal':
-            await handleRemoveStockModal(interaction);
             break;
         default:
             await interaction.reply({
@@ -116,7 +131,7 @@ async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitIntera
     }
 }
 
-async function handleAddStockModal(interaction: ModalSubmitInteraction) {
+async function handleAddStockModal(interaction: ModalSubmitInteraction, messageId: string) {
     const { ConfigManager } = await import('../utils/config');
 
     const stockName = interaction.fields.getTextInputValue('stock_name');
@@ -161,10 +176,37 @@ async function handleAddStockModal(interaction: ModalSubmitInteraction) {
             }
         });
 
-        // Refresh the marketplace stock panel to show updated stock
+        // Try to refresh the original embed using the message ID
+        try {
+            const channel = interaction.channel;
+            if (channel && channel.isTextBased()) {
+                const message = await channel.messages.fetch(messageId);
+                if (message) {
+                    // Refresh the marketplace stock panel in the original message
+                    const { createMarketplaceStockPanel } = await import('../views/marketplace/marketplaceStockPanel');
+                    const panel = createMarketplaceStockPanel(guildId);
+                    
+                    await message.edit({
+                        embeds: [panel.embed],
+                        components: [panel.components[0] as any, panel.components[1] as any]
+                    });
+                    
+                    // Acknowledge the modal submission
+                    await interaction.reply({
+                        content: '✅ Stock item added successfully! The panel has been updated.',
+                        ephemeral: true
+                    });
+                    return;
+                }
+            }
+        } catch (fetchError) {
+            console.log('Could not fetch original message, falling back to new panel');
+        }
+
+        // Fallback: Show new panel if original message can't be updated
         const additionalMessage = `
         > ===========================
-          > ✅ Successfully added new stock item!
+        > ✅ Successfully added new stock item!
         > ===========================`;
         await showMarketplaceStockPanel(interaction, additionalMessage);
     } catch (error) {
@@ -177,7 +219,7 @@ async function handleAddStockModal(interaction: ModalSubmitInteraction) {
     }
 }
 
-async function handleUpdateStockModal(interaction: ModalSubmitInteraction) {
+async function handleUpdateStockModal(interaction: ModalSubmitInteraction, messageId: string) {
     const { ConfigManager } = await import('../utils/config');
 
     const stockName = interaction.fields.getTextInputValue('stock_name');
@@ -214,7 +256,34 @@ async function handleUpdateStockModal(interaction: ModalSubmitInteraction) {
         });
 
         if (stockFound) {
-            // Refresh the marketplace stock panel to show updated stock
+            // Try to refresh the original embed using the message ID
+            try {
+                const channel = interaction.channel;
+                if (channel && channel.isTextBased()) {
+                    const message = await channel.messages.fetch(messageId);
+                    if (message) {
+                        // Refresh the marketplace stock panel in the original message
+                        const { createMarketplaceStockPanel } = await import('../views/marketplace/marketplaceStockPanel');
+                        const panel = createMarketplaceStockPanel(guildId);
+                        
+                        await message.edit({
+                            embeds: [panel.embed],
+                            components: [panel.components[0] as any, panel.components[1] as any]
+                        });
+                        
+                        // Acknowledge the modal submission
+                        await interaction.reply({
+                            content: '✅ Stock item updated successfully! The panel has been updated.',
+                            ephemeral: true
+                        });
+                        return;
+                    }
+                }
+            } catch (fetchError) {
+                console.log('Could not fetch original message, falling back to new panel');
+            }
+
+            // Fallback: Show new panel if original message can't be updated
             const additionalMessage = `
             > ===========================
             > ✅ Successfully updated stock item!
@@ -236,7 +305,7 @@ async function handleUpdateStockModal(interaction: ModalSubmitInteraction) {
     }
 }
 
-async function handleRemoveStockModal(interaction: ModalSubmitInteraction) {
+async function handleRemoveStockModal(interaction: ModalSubmitInteraction, messageId: string) {
     const { ConfigManager } = await import('../utils/config');
 
     const stockName = interaction.fields.getTextInputValue('stock_name');
@@ -260,7 +329,35 @@ async function handleRemoveStockModal(interaction: ModalSubmitInteraction) {
                 }
             });
 
-            // Refresh the marketplace stock panel to show updated stock
+            // Try to refresh the original embed using the message ID
+            try {
+                const channel = interaction.channel;
+                if (channel && channel.isTextBased()) {
+                    const message = await channel.messages.fetch(messageId);
+                    if (message) {
+                        // Refresh the marketplace stock panel in the original message
+                        const { createMarketplaceStockPanel } = await import('../views/marketplace/marketplaceStockPanel');
+                        const panel = createMarketplaceStockPanel(guildId);
+
+                        await message.edit({
+                            embeds: [panel.embed],
+                            components: [panel.components[0] as any, panel.components[1] as any]
+                        });
+
+                        // Acknowledge the modal submission
+                        await interaction.reply({
+                            content: '✅ Stock item removed successfully! The panel has been updated.',
+                            ephemeral: true
+                        });
+                        
+                        return;
+                    }
+                }
+            } catch (fetchError) {
+                console.log('Could not fetch original message, falling back to new panel');
+            }
+
+            // Fallback: Show new panel if original message can't be updated
             const additionalMessage = `
             > ===========================
             > ✅ Successfully removed stock item!
