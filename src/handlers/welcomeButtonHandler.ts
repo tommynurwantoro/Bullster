@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
 import { showWelcomeChannelPanel } from '../views/welcome/welcomeChannelPanel';
 import { ConfigManager } from '../utils/config';
 import { createWelcomeConfigPanel } from '../views/welcome/welcomeConfigPanel';
@@ -6,7 +6,7 @@ import { showWelcomeMessageUpdateModal } from '../views/welcome/welcomeMessageUp
 
 export async function handleWelcomeButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
-    
+
     switch (customId) {
         case 'welcome_enable':
             await handleWelcomeEnable(interaction);
@@ -23,7 +23,7 @@ export async function handleWelcomeButton(interaction: ButtonInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown welcome option',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -61,7 +61,7 @@ async function handleWelcomeDisable(interaction: ButtonInteraction) {
 
                 await interaction.reply({
                     content: '✅ Welcome system disabled.',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -69,7 +69,7 @@ async function handleWelcomeDisable(interaction: ButtonInteraction) {
         console.error('Error disabling welcome system:', error);
         await interaction.reply({
             content: '❌ Failed to disable welcome system. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -89,7 +89,7 @@ async function handleWelcomeTest(interaction: ButtonInteraction) {
     if (!config?.welcome?.channel || !config?.welcome?.message) {
         await interaction.reply({
             content: '⚠️ Welcome system not configured. Please configure it first.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -100,7 +100,7 @@ async function handleWelcomeTest(interaction: ButtonInteraction) {
         if (!channel || !('send' in channel)) {
             await interaction.reply({
                 content: '❌ Welcome channel not found. Please reconfigure the welcome system.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -127,7 +127,7 @@ async function handleWelcomeTest(interaction: ButtonInteraction) {
         // Show simple success message
         await interaction.reply({
             content: `✅ Test welcome message sent successfully to <#${config.welcome.channel}>!`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     } catch (error) {
@@ -135,7 +135,7 @@ async function handleWelcomeTest(interaction: ButtonInteraction) {
 
         await interaction.reply({
             content: '❌ Failed to send test welcome message. Please check bot permissions and try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }

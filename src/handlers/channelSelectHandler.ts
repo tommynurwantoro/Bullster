@@ -1,4 +1,4 @@
-import { ChannelSelectMenuInteraction } from 'discord.js';
+import { ChannelSelectMenuInteraction, MessageFlags } from 'discord.js';
 import { ConfigManager } from '../utils/config';
 import { createModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
 import { createMarketplaceConfigPanel, showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
@@ -30,7 +30,7 @@ export async function handleChannelSelect(interaction: ChannelSelectMenuInteract
         default:
             await interaction.reply({
                 content: '❌ Unknown channel selection',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -58,7 +58,7 @@ async function handleWelcomeChannel(interaction: ChannelSelectMenuInteraction) {
             const message = await channel.messages.fetch(interaction.message.id);
             if (message) {
                 const panel = createWelcomeConfigPanel(interaction.guildId!);
-                
+
                 await message.edit({
                     embeds: [panel.embed],
                     components: [panel.components[0] as any, panel.components[1] as any]
@@ -66,7 +66,7 @@ async function handleWelcomeChannel(interaction: ChannelSelectMenuInteraction) {
 
                 await interaction.reply({
                     content: `✅ Welcome channel set to <#${selectedChannel?.id}>!`,
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
 
                 return;
@@ -76,7 +76,7 @@ async function handleWelcomeChannel(interaction: ChannelSelectMenuInteraction) {
         console.error('Error setting welcome channel:', error);
         await interaction.reply({
             content: '❌ Failed to set welcome channel. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -89,7 +89,7 @@ async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction
     if (!selectedChannel) {
         await interaction.reply({
             content: '❌ No channel selected. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -118,7 +118,7 @@ async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction
 
                 await interaction.reply({
                     content: `✅ Points logs channel set to <#${selectedChannel.id}>!`,
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -126,7 +126,7 @@ async function handlePointsLogsChannel(interaction: ChannelSelectMenuInteraction
         console.error('Error setting points logs channel:', error);
         await interaction.reply({
             content: '❌ Failed to set points logs channel. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -139,7 +139,7 @@ async function handlePointsMarketplaceChannel(interaction: ChannelSelectMenuInte
     if (!selectedChannel) {
         await interaction.reply({
             content: '❌ No channel selected. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -157,14 +157,14 @@ async function handlePointsMarketplaceChannel(interaction: ChannelSelectMenuInte
 
         await interaction.reply({
             content: `✅ Points marketplace channel set to <#${selectedChannel.id}>! Your points system is now configured.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     } catch (error) {
         console.error('Error setting points marketplace channel:', error);
         await interaction.reply({
             content: '❌ Failed to set points marketplace channel. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -177,7 +177,7 @@ async function handleMarketplaceChannelSelect(interaction: ChannelSelectMenuInte
     if (!selectedChannel) {
         await interaction.reply({
             content: '❌ No channel selected. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -209,13 +209,13 @@ async function handleMarketplaceChannelSelect(interaction: ChannelSelectMenuInte
 
         await interaction.reply({
             content: `✅ Marketplace channel set to <#${selectedChannel.id}>!`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } catch (error) {
         console.error('Error setting marketplace channel:', error);
         await interaction.reply({
             content: '❌ Failed to set marketplace channel. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -228,7 +228,7 @@ async function handleModerationLogsChannel(interaction: ChannelSelectMenuInterac
     if (!selectedChannel) {
         await interaction.reply({
             content: '❌ No channel selected. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -258,7 +258,7 @@ async function handleModerationLogsChannel(interaction: ChannelSelectMenuInterac
                 });
                 await interaction.reply({
                     content: `✅ Moderation logs channel set to <#${selectedChannel.id}>!`,
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -266,7 +266,7 @@ async function handleModerationLogsChannel(interaction: ChannelSelectMenuInterac
         console.error('Error setting moderation logs channel:', error);
         await interaction.reply({
             content: '❌ Failed to set moderation logs channel. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }

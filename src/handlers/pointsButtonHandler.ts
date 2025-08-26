@@ -1,7 +1,6 @@
-import { ButtonInteraction } from 'discord.js';
-import { createPointsChannelSelectionPanel } from '../views';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
+import { createPointsChannelSelectionPanel } from '../views/points/pointConfigPanel';
 import { ConfigManager } from '../utils/config';
-import { showPointsConfigPanel } from '../views/points/pointConfigPanel';
 
 export async function handlePointsButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -19,7 +18,7 @@ export async function handlePointsButton(interaction: ButtonInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown points option',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -38,7 +37,7 @@ async function handlePointsBack(interaction: ButtonInteraction) {
     // which will return to the main configuration panel
     await interaction.reply({
         content: 'Use the back button to return to the main configuration panel.',
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     });
 }
 
@@ -64,13 +63,13 @@ async function handlePointsFeatureDisable(interaction: ButtonInteraction) {
             });
             await interaction.reply({
                 content: '✅ Points feature disabled!',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
     } else {
         await interaction.reply({
             content: '❌ Failed to disable points feature. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }

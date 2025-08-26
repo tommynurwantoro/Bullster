@@ -1,4 +1,4 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ModalSubmitInteraction } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, ModalSubmitInteraction, MessageFlags } from 'discord.js';
 import { ConfigManager } from '../../utils/config';
 
 export function createMarketplaceStockPanel(guildId: string) {
@@ -72,7 +72,7 @@ export async function showMarketplaceStockPanel(interaction: ButtonInteraction |
             content: additionalMessage || '',
             embeds: [panel.embed],
             components: [panel.components[0] as any, panel.components[1] as any],
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } else {
         // For button interactions, we can update

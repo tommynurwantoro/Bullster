@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Collection } from 'discord.js';
+import { ChatInputCommandInteraction, Collection, MessageFlags } from 'discord.js';
 
 export async function handleCommand(interaction: ChatInputCommandInteraction) {
     const command = (interaction.client as any).commands.get(interaction.commandName);
@@ -25,7 +25,7 @@ export async function handleCommand(interaction: ChatInputCommandInteraction) {
             const expiredTimestamp = Math.round(expirationTime / 1000);
             return interaction.reply({
                 content: `⏰ Please wait <t:${expiredTimestamp}:R> before using the \`${command.data.name}\` command again.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
     }
@@ -37,7 +37,7 @@ export async function handleCommand(interaction: ChatInputCommandInteraction) {
         await command.execute(interaction);
     } catch (error) {
         console.error(`❌ Error executing command ${interaction.commandName}:`, error);
-        
+
         const errorMessage = {
             content: '❌ There was an error while executing this command!',
             ephemeral: true

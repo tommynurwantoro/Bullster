@@ -1,5 +1,5 @@
-import { ButtonInteraction } from 'discord.js';
-import { createModerationConfigPanel, showModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
+import { createModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
 import { showModerationChannelPanel } from '../views/moderation/moderationChannelPanel';
 import { ConfigManager } from '../utils/config';
 import { showLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
@@ -23,7 +23,7 @@ export async function handleModerationButton(interaction: ButtonInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown moderation option',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -62,13 +62,13 @@ async function handleModerationDisable(interaction: ButtonInteraction) {
 
         await interaction.reply({
             content: '✅ Moderation disabled!',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } catch (error) {
         console.error('Error disabling moderation:', error);
         await interaction.reply({
             content: '❌ Failed to disable moderation. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -82,7 +82,7 @@ async function handleModerationLinkProtection(interaction: ButtonInteraction) {
         if (!moderationConfig.logsChannel) {
             await interaction.reply({
                 content: '⚠️ Moderation must be enabled first. Please enable moderation first.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -92,7 +92,7 @@ async function handleModerationLinkProtection(interaction: ButtonInteraction) {
         console.error('Error disabling link protection:', error);
         await interaction.reply({
             content: '❌ Failed to disable link protection. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -101,6 +101,6 @@ async function handleModerationBack(interaction: ButtonInteraction) {
     // This will be handled by the main button handler's back button logic
     await interaction.reply({
         content: 'Use the back button to return to the main configuration panel.',
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     });
 }

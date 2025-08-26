@@ -1,8 +1,7 @@
-import { ButtonInteraction } from 'discord.js';
-import { createLinkProtectionPanel, showLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
+import { createLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
 import { ConfigManager } from '../utils/config';
 import { createLinkProtectionModal } from '../views/moderation/linkProtectionModal';
-import { createModerationConfigPanel } from '../views/moderation/moderationConfigPanel';
 
 export async function handleLinkProtectionButton(interaction: ButtonInteraction) {
     const customId = interaction.customId;
@@ -44,7 +43,7 @@ async function handleLinkProtectionEnable(interaction: ButtonInteraction) {
             });
             await interaction.reply({
                 content: '✅ Link protection enabled!',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
     }
@@ -75,10 +74,10 @@ async function handleLinkProtectionDisable(interaction: ButtonInteraction) {
             });
             await interaction.reply({
                 content: '✅ Link protection disabled!',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
-    }   
+    }
 }
 
 async function handleLinkProtectionWhitelist(interaction: ButtonInteraction) {

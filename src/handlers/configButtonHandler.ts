@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
 import {
     showWelcomeConfigPanel,
     createResetConfirmPanel
@@ -29,7 +29,7 @@ export async function handleConfigButton(interaction: ButtonInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown configuration option',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }

@@ -1,4 +1,4 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, ButtonInteraction, ChannelSelectMenuInteraction, ModalSubmitInteraction } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, ButtonInteraction, ChannelSelectMenuInteraction, ModalSubmitInteraction, MessageFlags } from 'discord.js';
 import { ConfigManager } from '../../utils/config';
 
 export function createMarketplaceConfigPanel(guildId: string) {
@@ -44,10 +44,10 @@ export function createMarketplaceConfigPanel(guildId: string) {
                 .setMinValues(1)
                 .setMaxValues(1)
                 : new ButtonBuilder()
-                .setCustomId('marketplace_disable')
-                .setLabel('Disable Marketplace Feature')
-                .setStyle(ButtonStyle.Danger)
-                .setEmoji('❌')
+                    .setCustomId('marketplace_disable')
+                    .setLabel('Disable Marketplace Feature')
+                    .setStyle(ButtonStyle.Danger)
+                    .setEmoji('❌')
         );
 
     const controlRow = new ActionRowBuilder()
@@ -59,7 +59,7 @@ export function createMarketplaceConfigPanel(guildId: string) {
                 .setEmoji('📦')
                 .setDisabled(!hasMarketplaceChannel)
         );
-    
+
     const otherRows = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
@@ -86,7 +86,7 @@ export async function showMarketplaceConfigPanel(interaction: ButtonInteraction 
             content: additionalMessage || '',
             embeds: [panel.embed],
             components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any],
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } else {
         // For button and channel select interactions, we can update

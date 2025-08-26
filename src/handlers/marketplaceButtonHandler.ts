@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
 import { createMarketplaceConfigPanel, showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
 import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
 import { createStockAddModal, createStockRemoveModal, createStockUpdateModal } from '../views/marketplace/marketplaceStockModal';
@@ -32,7 +32,7 @@ export async function handleMarketplaceButton(interaction: ButtonInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown marketplace option',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -67,13 +67,13 @@ async function handleMarketplaceDisable(interaction: ButtonInteraction) {
 
         await interaction.reply({
             content: '✅ Marketplace disabled!',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } catch (error) {
         console.error('Error disabling marketplace:', error);
         await interaction.reply({
             content: '❌ Failed to disable marketplace. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -87,7 +87,7 @@ async function handleMarketplaceBack(interaction: ButtonInteraction) {
     // This will be handled by the main button handler's back button logic
     await interaction.reply({
         content: 'Use the back button to return to the main configuration panel.',
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     });
 }
 

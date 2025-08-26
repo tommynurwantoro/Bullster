@@ -1,4 +1,4 @@
-import { ModalSubmitInteraction } from 'discord.js';
+import { ModalSubmitInteraction, MessageFlags } from 'discord.js';
 import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
 import { createLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
 
@@ -8,7 +8,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
     // Check if customId contains a message ID (format: modalType:messageId)
     if (customId.includes(':')) {
         const [modalType, messageId] = customId.split(':');
-        
+
         switch (modalType) {
             case 'stock_add_modal':
                 await handleAddStockModal(interaction, messageId);
@@ -25,7 +25,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
             default:
                 await interaction.reply({
                     content: '❌ Unknown modal submission',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
         }
         return;
@@ -39,7 +39,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
         default:
             await interaction.reply({
                 content: '❌ Unknown modal submission',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
     }
 }
@@ -67,7 +67,7 @@ async function handleWelcomeMessageModal(interaction: ModalSubmitInteraction) {
         // Show simple success message
         await interaction.reply({
             content: `✅ Successfully updated welcome message!`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     } catch (error) {
@@ -75,7 +75,7 @@ async function handleWelcomeMessageModal(interaction: ModalSubmitInteraction) {
 
         await interaction.reply({
             content: '❌ Failed to configure welcome system. Please check bot permissions and try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -121,7 +121,7 @@ async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitIntera
                 });
                 await interaction.reply({
                     content: '✅ Link protection whitelist updated!',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -130,7 +130,7 @@ async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitIntera
 
         await interaction.reply({
             content: '❌ Failed to configure whitelist. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -157,7 +157,7 @@ async function handleAddStockModal(interaction: ModalSubmitInteraction, messageI
         if (stockExists) {
             await interaction.reply({
                 content: `❌ A stock item with the name **${stockName}** already exists. Please choose a different name.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -189,16 +189,16 @@ async function handleAddStockModal(interaction: ModalSubmitInteraction, messageI
                     // Refresh the marketplace stock panel in the original message
                     const { createMarketplaceStockPanel } = await import('../views/marketplace/marketplaceStockPanel');
                     const panel = createMarketplaceStockPanel(guildId);
-                    
+
                     await message.edit({
                         embeds: [panel.embed],
                         components: [panel.components[0] as any, panel.components[1] as any]
                     });
-                    
+
                     // Acknowledge the modal submission
                     await interaction.reply({
                         content: '✅ Stock item added successfully! The panel has been updated.',
-                        ephemeral: true
+                        flags: MessageFlags.Ephemeral
                     });
                     return;
                 }
@@ -218,7 +218,7 @@ async function handleAddStockModal(interaction: ModalSubmitInteraction, messageI
 
         await interaction.reply({
             content: '❌ Failed to configure stock. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -269,16 +269,16 @@ async function handleUpdateStockModal(interaction: ModalSubmitInteraction, messa
                         // Refresh the marketplace stock panel in the original message
                         const { createMarketplaceStockPanel } = await import('../views/marketplace/marketplaceStockPanel');
                         const panel = createMarketplaceStockPanel(guildId);
-                        
+
                         await message.edit({
                             embeds: [panel.embed],
                             components: [panel.components[0] as any, panel.components[1] as any]
                         });
-                        
+
                         // Acknowledge the modal submission
                         await interaction.reply({
                             content: '✅ Stock item updated successfully! The panel has been updated.',
-                            ephemeral: true
+                            flags: MessageFlags.Ephemeral
                         });
                         return;
                     }
@@ -296,7 +296,7 @@ async function handleUpdateStockModal(interaction: ModalSubmitInteraction, messa
         } else {
             await interaction.reply({
                 content: '❌ Stock not found. Please check the name and try again.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
     } catch (error) {
@@ -304,7 +304,7 @@ async function handleUpdateStockModal(interaction: ModalSubmitInteraction, messa
 
         await interaction.reply({
             content: '❌ Failed to configure stock. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }
@@ -351,9 +351,9 @@ async function handleRemoveStockModal(interaction: ModalSubmitInteraction, messa
                         // Acknowledge the modal submission
                         await interaction.reply({
                             content: '✅ Stock item removed successfully! The panel has been updated.',
-                            ephemeral: true
+                            flags: MessageFlags.Ephemeral
                         });
-                        
+
                         return;
                     }
                 }
@@ -370,7 +370,7 @@ async function handleRemoveStockModal(interaction: ModalSubmitInteraction, messa
         } else {
             await interaction.reply({
                 content: '❌ Stock not found. Please check the name and try again.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
     } catch (error) {
@@ -378,7 +378,7 @@ async function handleRemoveStockModal(interaction: ModalSubmitInteraction, messa
 
         await interaction.reply({
             content: '❌ Failed to remove stock. Please try again.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }

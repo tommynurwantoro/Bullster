@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { createMainConfigPanel } from '../views';
 
 export const data = new SlashCommandBuilder()
@@ -12,7 +12,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guildId) {
         await interaction.reply({
             content: '❌ This command can only be used in a server.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -21,7 +21,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!panel) {
         await interaction.reply({
             content: '❌ Failed to create configuration panel.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
