@@ -60,7 +60,7 @@ async function handleMarketplaceDisable(interaction: ButtonInteraction) {
                 const panel = createMarketplaceConfigPanel(interaction.guildId!);
                 await message.edit({
                     embeds: [panel.embed],
-                    components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any]
+                    components: [panel.components[0] as any, panel.components[1] as any]
                 });
             }
         }

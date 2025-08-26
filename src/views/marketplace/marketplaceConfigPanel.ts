@@ -9,7 +9,7 @@ export function createMarketplaceConfigPanel(guildId: string) {
     const embed = new EmbedBuilder()
         .setColor(hasMarketplaceChannel ? '#00ff00' : '#ff0000')
         .setTitle('💰 Marketplace Configuration')
-        .setDescription('Configure the marketplace system for your server:')
+        .setDescription('Configure the marketplace system for your server.')
         .addFields(
             {
                 name: '🔄 Current Status',
@@ -21,7 +21,7 @@ export function createMarketplaceConfigPanel(guildId: string) {
             {
                 name: '📋 Marketplace Channel',
                 value: hasMarketplaceChannel
-                    ? `✅ Configured: <#${config?.points?.marketplaceChannel}>`
+                    ? `✅ Channel: <#${config?.points?.marketplaceChannel}>`
                     : '❌ No channel selected',
                 inline: false
             },
@@ -35,23 +35,23 @@ export function createMarketplaceConfigPanel(guildId: string) {
         )
         .setFooter({ text: 'Powered by BULLSTER' });
 
-    const channelRow = new ActionRowBuilder()
+    const row1a = new ActionRowBuilder()
         .addComponents(
-            !hasMarketplaceChannel ? new ChannelSelectMenuBuilder()
+            new ChannelSelectMenuBuilder()
                 .setCustomId('marketplace_channel_select')
                 .setPlaceholder('Select channel for marketplace')
                 .setChannelTypes(ChannelType.GuildText)
                 .setMinValues(1)
                 .setMaxValues(1)
-                : new ButtonBuilder()
-                    .setCustomId('marketplace_disable')
-                    .setLabel('Disable Marketplace Feature')
-                    .setStyle(ButtonStyle.Danger)
-                    .setEmoji('❌')
         );
 
-    const controlRow = new ActionRowBuilder()
+    const row1b = new ActionRowBuilder()
         .addComponents(
+            new ButtonBuilder()
+                .setCustomId('marketplace_disable')
+                .setLabel('Disable Marketplace Feature')
+                .setStyle(ButtonStyle.Danger)
+                .setEmoji('❌'),
             new ButtonBuilder()
                 .setCustomId('marketplace_stock')
                 .setLabel('Manage Stock')
@@ -60,7 +60,9 @@ export function createMarketplaceConfigPanel(guildId: string) {
                 .setDisabled(!hasMarketplaceChannel)
         );
 
-    const otherRows = new ActionRowBuilder()
+    const row1 = !hasMarketplaceChannel ? row1a : row1b;
+
+    const row2 = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
                 .setCustomId('main_back')
@@ -71,7 +73,7 @@ export function createMarketplaceConfigPanel(guildId: string) {
 
     return {
         embed,
-        components: [channelRow, controlRow, otherRows]
+        components: [row1, row2]
     };
 }
 
@@ -85,7 +87,7 @@ export async function showMarketplaceConfigPanel(interaction: ButtonInteraction 
         await interaction.reply({
             content: additionalMessage || '',
             embeds: [panel.embed],
-            components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any],
+            components: [panel.components[0] as any, panel.components[1] as any],
             flags: MessageFlags.Ephemeral
         });
     } else {
@@ -93,7 +95,7 @@ export async function showMarketplaceConfigPanel(interaction: ButtonInteraction 
         await interaction.update({
             content: additionalMessage || '',
             embeds: [panel.embed],
-            components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any]
+            components: [panel.components[0] as any, panel.components[1] as any]
         });
     }
 }

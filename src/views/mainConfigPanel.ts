@@ -21,21 +21,29 @@ export async function createMainConfigPanel(interaction: ButtonInteraction | Cha
                 inline: false,
             },
             {
-                name: '☀️ Points Feature',
-                value: config?.points?.logsChannel && config?.points?.marketplaceChannel
-                    ? `
-                    ✅ Configured
-                    Logs: <#${config.points.logsChannel}>
-                    Marketplace: <#${config.points.marketplaceChannel}>`
-                    : '❌ Not configured',
-                inline: false
-            },
-            {
                 name: '🛡️ Moderation',
                 value: config?.moderation?.logsChannel
                     ? `
                     ✅ Configured
                     Logs: <#${config.moderation.logsChannel}>`
+                    : '❌ Not configured',
+                inline: false
+            },
+            {
+                name: '☀️ Points Feature',
+                value: config?.points?.logsChannel
+                    ? `
+                    ✅ Configured
+                    Logs: <#${config.points.logsChannel}>`
+                    : '❌ Not configured',
+                inline: false
+            },
+            {
+                name: '💰 Marketplace Feature',
+                value: config?.points?.marketplaceChannel
+                    ? `
+                    ✅ Configured
+                    Channel: <#${config.points.marketplaceChannel}>`
                     : '❌ Not configured',
                 inline: false
             }
@@ -51,15 +59,15 @@ export async function createMainConfigPanel(interaction: ButtonInteraction | Cha
                 .setStyle(config?.welcome?.channel ? ButtonStyle.Success : ButtonStyle.Primary)
                 .setEmoji('🎯'),
             new ButtonBuilder()
-                .setCustomId('config_points')
-                .setLabel('Points Feature')
-                .setStyle(config?.points?.logsChannel ? ButtonStyle.Success : ButtonStyle.Primary)
-                .setEmoji('☀️'),
-            new ButtonBuilder()
                 .setCustomId('config_moderation')
                 .setLabel('Moderation')
                 .setStyle(config?.moderation?.logsChannel ? ButtonStyle.Success : ButtonStyle.Primary)
-                .setEmoji('🛡️')
+                .setEmoji('🛡️'),
+            new ButtonBuilder()
+                .setCustomId('config_points')
+                .setLabel('Points Feature')
+                .setStyle(config?.points?.logsChannel ? ButtonStyle.Success : ButtonStyle.Primary)
+                .setEmoji('☀️')
         );
 
     const row2 = new ActionRowBuilder()

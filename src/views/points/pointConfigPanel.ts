@@ -6,13 +6,20 @@ export function createPointsChannelSelectionPanel(guildId: string) {
     const embed = new EmbedBuilder()
         .setColor(config?.points?.logsChannel ? '#00ff00' : '#ff0000')
         .setTitle('☀️ Points Configuration')
-        .setDescription('Select the channel where point transactions will be logged')
+        .setDescription('Configure the points system for your server.')
         .addFields(
             {
-                name: '📊 Points Status',
+                name: '🔄 Current Status',
                 value: config?.points?.logsChannel
-                    ? `✅ **ENABLED**\nLogs Channel: <#${config?.points?.logsChannel}>`
-                    : '❌ **DISABLED** - No points logs channel configured',
+                    ? `✅ ENABLED - Points system is active`
+                    : '❌ DISABLED - No points logs channel configured',
+                inline: false
+            },
+            {
+                name: '📋 Points Logs Channel',
+                value: config?.points?.logsChannel
+                    ? `✅ Channel: <#${config?.points?.logsChannel}>`
+                    : '❌ No channel selected',
                 inline: false
             }
         )
@@ -28,11 +35,11 @@ export function createPointsChannelSelectionPanel(guildId: string) {
                 .setMaxValues(1)
                 .setDefaultChannels(config?.points?.logsChannel ? [config.points.logsChannel] : [])
                 .setDisabled(config?.points?.logsChannel ? true : false)
-            : new ButtonBuilder()
-                .setCustomId(`points_feature_disable`)
-                .setLabel('Disable Points Feature')
-                .setStyle(ButtonStyle.Danger)
-                .setEmoji('❌')
+                : new ButtonBuilder()
+                    .setCustomId(`points_feature_disable`)
+                    .setLabel('Disable Points Feature')
+                    .setStyle(ButtonStyle.Danger)
+                    .setEmoji('❌')
         );
 
     const buttonRow = new ActionRowBuilder()
