@@ -57,12 +57,13 @@ async function handleModerationDisable(interaction: ButtonInteraction) {
                     embeds: [panel.embed],
                     components: [panel.components[0] as any, panel.components[1] as any]
                 });
-                await interaction.reply({
-                    content: '✅ Moderation disabled!',
-                    ephemeral: true
-                });
             }
         }
+
+        await interaction.reply({
+            content: '✅ Moderation disabled!',
+            ephemeral: true
+        });
     } catch (error) {
         console.error('Error disabling moderation:', error);
         await interaction.reply({

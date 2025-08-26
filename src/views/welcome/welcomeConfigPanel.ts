@@ -4,7 +4,7 @@ import { ConfigManager } from '../../utils/config';
 export function createWelcomeConfigPanel(guildId: string) {
     const config = ConfigManager.getGuildConfig(guildId);
     const embed = new EmbedBuilder()
-        .setColor('#00ff00')
+        .setColor(config?.welcome?.channel ? '#00ff00' : '#ff0000')
         .setTitle('🎯 Welcome System Configuration')
         .setDescription('Click the buttons below to configure the welcome system')
         .setFooter({ text: 'Powered by BULLSTER' });

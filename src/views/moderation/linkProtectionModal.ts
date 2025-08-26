@@ -1,8 +1,8 @@
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 
-export function createLinkProtectionModal() {
+export function createLinkProtectionModal(messageId: string) {
     const modal = new ModalBuilder()
-        .setCustomId('link_protection_whitelist_modal')
+        .setCustomId(`link_protection_whitelist_modal:${messageId}`)
         .setTitle('🔗 Configure Link Protection Whitelist');
 
     const whitelistInput = new TextInputBuilder()

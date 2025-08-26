@@ -1,5 +1,5 @@
 import { ButtonInteraction } from 'discord.js';
-import { showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
+import { createMarketplaceConfigPanel, showMarketplaceConfigPanel } from '../views/marketplace/marketplaceConfigPanel';
 import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
 import { createStockAddModal, createStockRemoveModal, createStockUpdateModal } from '../views/marketplace/marketplaceStockModal';
 import { ConfigManager } from '../utils/config';
@@ -52,12 +52,23 @@ async function handleMarketplaceDisable(interaction: ButtonInteraction) {
             }
         });
 
-        const additionalMessage = `
-        > ===========================
-        > ✅ Marketplace disabled successfully!
-        > ===========================`;
-        await showMarketplaceConfigPanel(interaction, additionalMessage);
+        const channel = interaction.channel;
 
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(interaction.message.id);
+            if (message) {
+                const panel = createMarketplaceConfigPanel(interaction.guildId!);
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any, panel.components[2] as any]
+                });
+            }
+        }
+
+        await interaction.reply({
+            content: '✅ Marketplace disabled!',
+            ephemeral: true
+        });
     } catch (error) {
         console.error('Error disabling marketplace:', error);
         await interaction.reply({

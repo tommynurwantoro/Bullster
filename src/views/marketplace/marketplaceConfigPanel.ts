@@ -37,22 +37,21 @@ export function createMarketplaceConfigPanel(guildId: string) {
 
     const channelRow = new ActionRowBuilder()
         .addComponents(
-            new ChannelSelectMenuBuilder()
+            !hasMarketplaceChannel ? new ChannelSelectMenuBuilder()
                 .setCustomId('marketplace_channel_select')
                 .setPlaceholder('Select channel for marketplace')
                 .setChannelTypes(ChannelType.GuildText)
                 .setMinValues(1)
                 .setMaxValues(1)
-        );
-
-    const controlRow = new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
+                : new ButtonBuilder()
                 .setCustomId('marketplace_disable')
                 .setLabel('Disable Marketplace Feature')
                 .setStyle(ButtonStyle.Danger)
                 .setEmoji('❌')
-                .setDisabled(!hasMarketplaceChannel),
+        );
+
+    const controlRow = new ActionRowBuilder()
+        .addComponents(
             new ButtonBuilder()
                 .setCustomId('marketplace_stock')
                 .setLabel('Manage Stock')

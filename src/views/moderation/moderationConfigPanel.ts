@@ -26,11 +26,6 @@ export function createModerationConfigPanel(guildId: string) {
                         ? '❌ **DISABLED** - Ready to enable'
                         : '❌ **UNAVAILABLE** - Enable moderation first',
                 inline: false
-            },
-            {
-                name: '🛡️ Features',
-                value: '• Moderation logging\n• Link protection',
-                inline: false
             }
         )
         .setFooter({ text: 'Powered by BULLSTER' });

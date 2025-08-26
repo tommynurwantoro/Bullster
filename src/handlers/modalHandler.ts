@@ -1,5 +1,6 @@
 import { ModalSubmitInteraction } from 'discord.js';
 import { showMarketplaceStockPanel } from '../views/marketplace/marketplaceStockPanel';
+import { createLinkProtectionPanel } from '../views/moderation/linkProtectionPanel';
 
 export async function handleModal(interaction: ModalSubmitInteraction) {
     const customId = interaction.customId;
@@ -18,6 +19,9 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
             case 'stock_remove_modal':
                 await handleRemoveStockModal(interaction, messageId);
                 break;
+            case 'link_protection_whitelist_modal':
+                await handleLinkProtectionWhitelistModal(interaction, messageId);
+                break;
             default:
                 await interaction.reply({
                     content: '❌ Unknown modal submission',
@@ -31,9 +35,6 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
     switch (customId) {
         case 'welcome_message_modal':
             await handleWelcomeMessageModal(interaction);
-            break;
-        case 'link_protection_whitelist_modal':
-            await handleLinkProtectionWhitelistModal(interaction);
             break;
         default:
             await interaction.reply({
@@ -79,7 +80,7 @@ async function handleWelcomeMessageModal(interaction: ModalSubmitInteraction) {
     }
 }
 
-async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitInteraction) {
+async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitInteraction, messageId: string) {
     const { ConfigManager } = await import('../utils/config');
 
     const domainsInput = interaction.fields.getTextInputValue('whitelist_domains');
@@ -108,19 +109,22 @@ async function handleLinkProtectionWhitelistModal(interaction: ModalSubmitIntera
             }
         });
 
-        // Show success message
-        const domainList = domains.length > 0 ? domains.join(', ') : 'None';
-        const additionalMessage = `
-        > ===========================
-        > ✅ Successfully updated link protection whitelist!
-        > **Whitelisted Domains:** ${domainList}
-        > **Description:** ${descriptionInput || 'None'}
-        > ===========================`;
-        await interaction.reply({
-            content: additionalMessage,
-            ephemeral: true
-        });
+        const channel = interaction.channel;
 
+        if (channel && channel.isTextBased()) {
+            const message = await channel.messages.fetch(messageId);
+            if (message) {
+                const panel = createLinkProtectionPanel(guildId);
+                await message.edit({
+                    embeds: [panel.embed],
+                    components: [panel.components[0] as any, panel.components[1] as any]
+                });
+                await interaction.reply({
+                    content: '✅ Link protection whitelist updated!',
+                    ephemeral: true
+                });
+            }
+        }
     } catch (error) {
         console.error('Error configuring link protection whitelist:', error);
 
